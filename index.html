@@ -1,0 +1,497 @@
+<!--
+  Project: E-Commerce Product Page & Store
+  Author: Omkar R. Ghare
+  GitHub: https://github.com/ghareomkarr88
+  Created: August 2026
+  Last Updated: September 2026
+
+  © 2026 Omkar R. Ghare. All rights reserved.
+
+  This project and its source code are licensed under the MIT License.
+  See the LICENSE file in the root directory for full details.
+-->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NexaShop - Premium 3D Animated E-Commerce Store with best deals on electronics, fashion, and more." />
+  <meta name="keywords" content="ecommerce, shop, buy online, electronics, fashion, deals" />
+  <meta name="author" content="NexaShop" />
+  <meta property="og:title" content="NexaShop - Premium E-Commerce Store" />
+  <meta property="og:description" content="Discover amazing products at unbeatable prices." />
+  <meta property="og:type" content="website" />
+  <title>NexaShop | Premium E-Commerce Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============ PRELOADER ============ -->
+<div id="preloader">
+  <div class="preloader-particles" id="preloaderParticles"></div>
+  <div class="preloader-logo">NexaShop</div>
+  <div class="preloader-3d-box">
+    <div class="cube-face front">🛍️</div>
+    <div class="cube-face back">✨</div>
+    <div class="cube-face right">💎</div>
+    <div class="cube-face left">🚀</div>
+    <div class="cube-face top">⭐</div>
+    <div class="cube-face bottom">🎯</div>
+  </div>
+  <div class="preloader-bar-wrap">
+    <div class="preloader-bar"></div>
+  </div>
+  <div class="preloader-text">Loading Amazing Products...</div>
+</div>
+
+<!-- ============ TOAST CONTAINER ============ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============ HEADER ============ -->
+<header id="mainHeader">
+  <div class="nav-logo" onclick="scrollToTop()">NexaShop</div>
+
+  <div class="nav-search">
+    <input type="text" id="searchInput" placeholder="Search products..." autocomplete="off" />
+    <i class="fas fa-search search-icon"></i>
+    <div class="search-suggestions" id="searchSuggestions"></div>
+  </div>
+
+  <div class="nav-actions">
+    <button class="nav-btn" id="wishlistBtn" title="Wishlist" onclick="toggleWishlist()">
+      <i class="fas fa-heart"></i>
+      <span class="badge" id="wishlistBadge" style="display:none">0</span>
+    </button>
+    <button class="nav-btn" id="cartBtn" title="Cart" onclick="toggleCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="badge" id="cartBadge" style="display:none">0</span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <i class="fas fa-moon" id="themeIcon"></i>
+    </button>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ MOBILE NAV ============ -->
+<div class="mobile-nav" id="mobileNav">
+  <input type="text" id="mobileSearch" placeholder="Search products..." />
+  <div style="display:flex;gap:12px;flex-wrap:wrap;">
+    <button class="filter-toggle-btn" onclick="toggleFilter()"><i class="fas fa-filter"></i> Filters</button>
+    <button class="btn-secondary" style="color:var(--text);border-color:var(--border);background:var(--bg3);" onclick="toggleWishlist()"><i class="fas fa-heart"></i> Wishlist</button>
+  </div>
+</div>
+
+<!-- ============ CART OVERLAY ============ -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- ============ CART SIDEBAR ============ -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div class="cart-title">
+      <i class="fas fa-shopping-cart"></i>
+      Your Cart
+      <span class="cart-count-chip" id="cartCountChip">0</span>
+    </div>
+    <button class="cart-close-btn" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-footer" id="cartFooter">
+    <div class="cart-summary" id="cartSummary"></div>
+    <button class="checkout-btn" onclick="openCheckout()">
+      <i class="fas fa-lock"></i> Secure Checkout
+    </button>
+    <span class="continue-shopping" onclick="toggleCart()">← Continue Shopping</span>
+  </div>
+</div>
+
+<!-- ============ WISHLIST SIDEBAR ============ -->
+<div class="wishlist-sidebar" id="wishlistSidebar">
+  <div class="wishlist-header">
+    <div class="cart-title" style="font-size:1.1rem;">
+      <i class="fas fa-heart" style="color:var(--secondary)"></i>
+      Wishlist
+      <span class="cart-count-chip" id="wishlistCountChip">0</span>
+    </div>
+    <button class="cart-close-btn" onclick="toggleWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="wishlist-body" id="wishlistBody"></div>
+</div>
+
+<!-- ============ PRODUCT MODAL OVERLAY ============ -->
+<div class="modal-overlay" id="productModalOverlay" onclick="handleModalClose(event)">
+  <div class="product-modal" id="productModal">
+    <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ============ CHECKOUT MODAL OVERLAY ============ -->
+<div class="modal-overlay" id="checkoutModalOverlay" onclick="handleCheckoutClose(event)">
+  <div class="checkout-modal" id="checkoutModal">
+    <button class="modal-close" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+    <div class="checkout-header">
+      <h2 style="font-size:1.3rem;font-weight:900;color:var(--text);">🔒 Secure Checkout</h2>
+      <div class="checkout-steps" id="checkoutSteps"></div>
+    </div>
+    <div class="checkout-body" id="checkoutBody"></div>
+  </div>
+</div>
+
+<!-- ============ FILTER OVERLAY (Mobile) ============ -->
+<div class="cart-overlay" id="filterOverlay" onclick="toggleFilter()" style="z-index:1499;"></div>
+
+<!-- ============ HERO SECTION ============ -->
+<section id="hero">
+  <div class="hero-bg-shapes">
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        🔥 2025 Summer Collection
+      </div>
+      <h1 class="hero-title">
+        Discover <span>Premium</span> Products
+        For Every Lifestyle
+      </h1>
+      <p class="hero-desc">
+        Shop the latest trends with unbeatable prices. Free shipping on orders over $50. 30-day hassle-free returns.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollToShop()">
+          <i class="fas fa-shopping-bag"></i> Shop Now
+        </button>
+        <button class="btn-secondary" onclick="scrollToDeals()">
+          <i class="fas fa-bolt"></i> Flash Deals
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">50K+</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">1M+</div>
+          <div class="stat-label">Customers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.9★</div>
+          <div class="stat-label">Rating</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-3d-card">
+        <div class="hero-card-inner">
+          <span class="hero-card-emoji" id="heroEmoji">🎧</span>
+          <div class="hero-card-name" id="heroName">Pro Headphones</div>
+          <div class="hero-card-price" id="heroPrice">$299</div>
+          <div class="hero-card-stars">⭐⭐⭐⭐⭐</div>
+        </div>
+        <div class="hero-floating-tags">
+          <div class="floating-tag floating-tag-1">🚚 Free Shipping</div>
+          <div class="floating-tag floating-tag-2">💯 Authentic</div>
+          <div class="floating-tag floating-tag-3">🔥 Best Seller</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator" onclick="scrollToShop()">
+    <div class="scroll-mouse"></div>
+    <span>Scroll Down</span>
+  </div>
+</section>
+
+<!-- ============ CATEGORIES SECTION ============ -->
+<section id="categories" class="fade-in">
+  <div class="section-header">
+    <div class="section-badge">Browse By Category</div>
+    <h2 class="section-title">Shop by <span>Category</span></h2>
+    <p class="section-desc">Explore our curated collections across popular categories</p>
+  </div>
+  <div class="categories-grid" id="categoriesGrid"></div>
+</section>
+
+<!-- ============ FEATURES BAR ============ -->
+<section id="features">
+  <div class="features-inner">
+    <div class="feature-item fade-in">
+      <div class="feature-icon">🚚</div>
+      <div class="feature-name">Free Shipping</div>
+      <div class="feature-desc">On all orders above $50 with guaranteed delivery</div>
+    </div>
+    <div class="feature-item fade-in">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-name">Secure Payment</div>
+      <div class="feature-desc">256-bit SSL encryption for all transactions</div>
+    </div>
+    <div class="feature-item fade-in">
+      <div class="feature-icon">↩️</div>
+      <div class="feature-name">Easy Returns</div>
+      <div class="feature-desc">30-day hassle-free return policy</div>
+    </div>
+    <div class="feature-item fade-in">
+      <div class="feature-icon">🎧</div>
+      <div class="feature-name">24/7 Support</div>
+      <div class="feature-desc">Round-the-clock customer support team</div>
+    </div>
+    <div class="feature-item fade-in">
+      <div class="feature-icon">💎</div>
+      <div class="feature-name">Premium Quality</div>
+      <div class="feature-desc">Carefully selected authentic products only</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLASH DEALS ============ -->
+<section id="deals" class="fade-in">
+  <div class="deals-header">
+    <div>
+      <div class="section-badge">Limited Time</div>
+      <h2 class="section-title">⚡ Flash <span>Deals</span></h2>
+    </div>
+    <div class="countdown-timer" id="countdownTimer"></div>
+  </div>
+  <div class="deals-grid" id="dealsGrid"></div>
+</section>
+
+<!-- ============ MAIN SHOP SECTION ============ -->
+<section id="shop">
+  <div class="shop-inner">
+    <div class="section-header fade-in" style="text-align:left;margin-bottom:32px;">
+      <div class="section-badge">Our Collection</div>
+      <h2 class="section-title">All <span>Products</span></h2>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="shop-toolbar fade-in">
+      <div class="toolbar-left">
+        <button class="filter-toggle-btn" onclick="toggleFilter()">
+          <i class="fas fa-filter"></i>
+          <span id="filterBtnText">Filters</span>
+        </button>
+        <div class="products-count" id="productsCount">
+          Showing <strong>0</strong> products
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <select class="sort-select" id="sortSelect">
+          <option value="default">Sort By: Default</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A to Z</option>
+          <option value="name-desc">Name: Z to A</option>
+          <option value="rating">Highest Rated</option>
+          <option value="popularity">Most Popular</option>
+          <option value="newest">Newest First</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridViewBtn" title="Grid View" onclick="setView('grid')">
+            <i class="fas fa-th"></i>
+          </button>
+          <button class="view-btn" id="listViewBtn" title="List View" onclick="setView('list')">
+            <i class="fas fa-list"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-layout" id="shopLayout">
+      <!-- Filter Sidebar -->
+      <aside class="filter-sidebar" id="filterSidebar">
+        <div class="filter-section">
+          <div class="filter-title">Price Range</div>
+          <div class="price-inputs">
+            <input class="price-input" type="number" id="minPrice" placeholder="Min $" min="0" />
+            <input class="price-input" type="number" id="maxPrice" placeholder="Max $" max="5000" />
+          </div>
+          <input type="range" class="range-slider" id="priceRange" min="0" max="2000" value="2000" />
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text3);margin-top:6px;">
+            <span>$0</span><span id="rangeVal">$2000+</span>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Rating</div>
+          <div class="rating-filter" id="ratingFilter">
+            <label class="rating-option selected" data-rating="0">
+              <input type="radio" name="rating" value="0" checked />
+              <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-label">All Ratings</span>
+            </label>
+            <label class="rating-option" data-rating="4">
+              <input type="radio" name="rating" value="4" />
+              <span class="rating-stars">⭐⭐⭐⭐</span>
+              <span class="rating-label">4+ Stars</span>
+            </label>
+            <label class="rating-option" data-rating="3">
+              <input type="radio" name="rating" value="3" />
+              <span class="rating-stars">⭐⭐⭐</span>
+              <span class="rating-label">3+ Stars</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Tags</div>
+          <div id="tagsFilter">
+            <label class="check-option">
+              <input type="checkbox" value="new" class="tag-filter" />
+              <span class="check-box"></span>
+              <span class="check-label">🆕 New Arrivals</span>
+            </label>
+            <label class="check-option">
+              <input type="checkbox" value="sale" class="tag-filter" />
+              <span class="check-box"></span>
+              <span class="check-label">🏷️ On Sale</span>
+            </label>
+            <label class="check-option">
+              <input type="checkbox" value="hot" class="tag-filter" />
+              <span class="check-box"></span>
+              <span class="check-label">🔥 Hot Items</span>
+            </label>
+            <label class="check-option">
+              <input type="checkbox" value="top" class="tag-filter" />
+              <span class="check-box"></span>
+              <span class="check-label">⭐ Top Rated</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Availability</div>
+          <label class="check-option">
+            <input type="checkbox" id="inStockOnly" />
+            <span class="check-box"></span>
+            <span class="check-label">In Stock Only</span>
+          </label>
+        </div>
+
+        <button class="clear-filter-btn" onclick="clearFilters()">
+          <i class="fas fa-times"></i> Clear All Filters
+        </button>
+      </aside>
+
+      <!-- Products Area -->
+      <div class="products-area">
+        <div class="products-grid" id="productsGrid"></div>
+        <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+          <button class="load-more-btn" onclick="loadMore()">
+            <i class="fas fa-sync-alt"></i> Load More Products
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="testimonials" class="fade-in">
+  <div class="section-header">
+    <div class="section-badge">Customer Reviews</div>
+    <h2 class="section-title">What Our <span>Customers</span> Say</h2>
+    <p class="section-desc">Join millions of happy customers worldwide</p>
+  </div>
+  <div class="testimonials-grid" id="testimonialsGrid"></div>
+</section>
+
+<!-- ============ NEWSLETTER ============ -->
+<section id="newsletter">
+  <div class="newsletter-inner fade-in">
+    <div class="newsletter-emoji">📬</div>
+    <div class="section-badge">Stay Updated</div>
+    <h2 class="section-title" style="font-size:2rem;">Subscribe & Save <span>20%</span></h2>
+    <p class="section-desc">Get the latest deals, product drops, and exclusive offers straight to your inbox.</p>
+    <form class="newsletter-form" id="newsletterForm">
+      <input class="newsletter-input" type="email" id="newsletterEmail" placeholder="Enter your email address..." required />
+      <button class="newsletter-btn" type="submit">
+        <i class="fas fa-paper-plane"></i> Subscribe
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid"> 
+      <div class="footer-brand">
+        <div class="footer-logo">NexaShop</div>
+        <p class="footer-desc">Your premium destination for the latest products at unbeatable prices. We curate the best brands just for you.</p>
+        <div class="social-links">
+          <a href="https://github.com/ghareomkarr88" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+          <a href="https://instagram.com/ogcoderworld" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com/@ghareomkarr88" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a href="https://in.pinterest.com/ghareomkarr88/" class="social-link" target="_blank"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul class="footer-links">
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Flash Deals</a></li>
+          <li><a href="#">Gift Cards</a></li>
+          <li><a href="#">Bulk Orders</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul class="footer-links">
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press Kit</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NexaShop. All rights reserved. Made with 💖 By Omkar R. Ghare</span>
+      <div class="payment-icons">
+        <span class="payment-icon">VISA</span>
+        <span class="payment-icon">MC</span>
+        <span class="payment-icon">AMEX</span>
+        <span class="payment-icon">PayPal</span>
+        <span class="payment-icon">Apple Pay</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ BACK TO TOP ============ -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- ============================================================
+     JAVASCRIPT - COMPLETE APPLICATION
+============================================================= -->
+<script src="js/script.js"></script>
+</body>
+</html>
